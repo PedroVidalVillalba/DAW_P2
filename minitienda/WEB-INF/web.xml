@@ -1,0 +1,11 @@
+<web-app>
+    <servlet>
+        <servlet-name>MiniStore</servlet-name>
+        <servlet-class>MiniStore</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MiniStore</servlet-name>
+        <url-pattern>/addToCart</url-pattern>
+    </servlet-mapping>
+</web-app>
