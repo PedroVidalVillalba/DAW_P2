@@ -1,7 +1,7 @@
 <web-app>
     <servlet>
         <servlet-name>MiniStore</servlet-name>
-        <servlet-class>MiniStore</servlet-class>
+        <servlet-class>ministore.MiniStore</servlet-class>
     </servlet>
 
     <servlet-mapping>

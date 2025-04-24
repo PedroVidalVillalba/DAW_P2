@@ -1,3 +1,5 @@
+package ministore;
+
 import java.util.Objects;
 
 public class CD {
@@ -9,23 +11,15 @@ public class CD {
 
     public CD(String raw) {
         // Formato del archivo: "name";"author";"country";price
-        String[] parts = raw.strip().split(";");
+        String[] parts = raw.strip().split(" \\| ");
         if (parts.length != 4) {
             throw new IllegalArgumentException("Formato incorrecto de línea: " + raw);
         }
 
-        this.name = quitarComillas(parts[0]);
-        this.author = quitarComillas(parts[1]);
-        this.country = quitarComillas(parts[2]);
-        this.price = Double.parseDouble(parts[3]);
-    }
-
-    private static String quitarComillas(String s) {
-        s = s.trim();
-        if (s.startsWith("\"") && s.endsWith("\"")) {
-            return s.substring(1, s.length() - 1);
-        }
-        return s;
+        this.name = parts[0];
+        this.author = parts[1];
+        this.country = parts[2];
+        this.price = Double.parseDouble(parts[3].substring(1));
     }
 
     public String getName() {
@@ -46,8 +40,8 @@ public class CD {
 
 
 
-    public String toFileString() {
-        return String.format("\"%s\";\"%s\";\"%s\";%.2f", name, author, country, price);
+    public String toString() {
+        return String.format("%s|%s|%s|%.2f", name, author, country, price);
     }
 
     @Override

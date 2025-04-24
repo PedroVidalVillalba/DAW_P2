@@ -1,3 +1,5 @@
+package ministore;
+
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
@@ -20,6 +22,10 @@ public class Cart {
         return cart.keySet();
     }
 
+    public int getQuantity(CD item) {
+        return cart.get(item);
+    }
+
     public void addItem(CD cd, int quantity) {
         cart.put(cd, quantity);
     }
@@ -37,7 +43,11 @@ public class Cart {
         return total;
     }
 
-    public boolean isEmptyCart() {
+    public double getCost (CD cd) {
+        return cd.getPrice() * cart.get(cd);
+    }
+
+    public boolean isEmpty() {
         return cart.isEmpty();
     }
 
