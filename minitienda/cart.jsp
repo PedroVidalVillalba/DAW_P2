@@ -7,9 +7,9 @@
 </head>
 <body>
 <%
-//    HttpSession session = request.getSession(false);
-//    Cart cart = (session == null) ? null : (Cart) session.getAttribute("cart");
-    Cart cart = (Cart) request.getAttribute("cart");
+    HttpSession session = request.getSession(false);
+    Cart cart = (session == null) ? null : (Cart) session.getAttribute("cart");
+//    Cart cart = (Cart) request.getAttribute("cart");
 %>
 
 <h1>Carrito de la compra</h1>
