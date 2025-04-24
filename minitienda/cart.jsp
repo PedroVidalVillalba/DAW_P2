@@ -7,9 +7,8 @@
 </head>
 <body>
 <%
-//    HttpSession session = request.getSession(false);
-//    Cart cart = (session == null) ? null : (Cart) session.getAttribute("cart");
-    Cart cart = (Cart) request.getAttribute("cart");
+    HttpSession session = request.getSession(false);
+    Cart cart = (session == null) ? null : (Cart) session.getAttribute("cart");
 %>
 
 <h1>Carrito de la compra</h1>
@@ -29,13 +28,13 @@
         <tr>
             <td><%= cd.toString() %></td>
             <td><%= cart.getQuantity(cd) %></td>
-            <td><%= cart.getCost(cd) %></td>
+            <td><%= String.format("%.02f", cart.getCost(cd)) %></td>
         </tr>
         <% } %>
         <tr>
             <td></td>
             <td>Total</td>
-            <td><%= cart.computeTotal() %></td>
+            <td><%= String.format("%.02f", cart.computeTotal()) %></td>
         </tr>
         <% } else { %>
             <h3>Carrito vacío</h3>
