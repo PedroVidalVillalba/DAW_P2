@@ -41,7 +41,7 @@ public class CD {
 
 
     public String toString() {
-        return String.format("%s|%s|%s|%.2f", name, author, country, price);
+        return String.format("%s | %s | %s | %.2f", name, author, country, price);
     }
 
     @Override
