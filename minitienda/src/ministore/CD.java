@@ -3,7 +3,6 @@ package ministore;
 import java.util.Objects;
 
 public class CD {
-
     private final String name;
     private final String author;
     private final String country;
@@ -16,9 +15,9 @@ public class CD {
             throw new IllegalArgumentException("Formato incorrecto de línea: " + raw);
         }
 
-        this.name = parts[0];
-        this.author = parts[1];
-        this.country = parts[2];
+        this.name = parts[0].strip();
+        this.author = parts[1].strip();
+        this.country = parts[2].strip();
         this.price = Double.parseDouble(parts[3].substring(1));
     }
 

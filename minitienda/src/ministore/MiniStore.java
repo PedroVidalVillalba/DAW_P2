@@ -1,7 +1,6 @@
 package ministore;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -11,7 +10,8 @@ public class MiniStore extends HttpServlet {
         throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         Cart cart;
-        if(session.isNew()) {
+
+        if (session.isNew()) {
             cart = new Cart();
             session.setAttribute("cart", cart);
         } else {
