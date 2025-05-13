@@ -15,8 +15,8 @@ public class DataBase {
     private static DataBase currentDB;
     private static Connection connection;
 
-    private UserDAO userDAO;
-    private PurchaseDAO purchaseDAO;
+    private final UserDAO userDAO;
+    private final PurchaseDAO purchaseDAO;
 
     public static final String CONFIGURATION_FILE = "/database.properties";
 

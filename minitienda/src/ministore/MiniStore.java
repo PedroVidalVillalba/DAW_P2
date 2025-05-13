@@ -6,7 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
 public class MiniStore extends HttpServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         String action = request.getParameter("action");
 
@@ -14,74 +14,111 @@ public class MiniStore extends HttpServlet {
         switch (action) {
             case "addToCart":
                 handleAddToCart(request, response);
+                break;
             case "deleteFromCart":
                 handleDeleteFromCart(request, response);
+                break;
             case "purchase":
                 handlePurchase(request, response);
+                break;
             case "login":
                 handleLogin(request, response);
+                break;
             case "signup":
                 handleSignup(request, response);
+                break;
             case "seeAllPurchases":
                 handleSeeAllPurchases(request, response);
+                break;
+        }
+    }
+
+    private Cart retrieveCart(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(true);
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if (cart == null) {
+            cart = new Cart();
+            session.setAttribute("cart", cart);
         }
 
+        return cart;
+    }
+
+    private void storeInSession(HttpServletRequest request, String key) {
+        HttpSession session = request.getSession();
+        Object value = session.getAttribute(key);
+
+        if (value != null) {
+            session.setAttribute(key, value);
+        }
+    }
+
+    private void changeView(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException {
+        RequestDispatcher rd = request.getRequestDispatcher(view);
+        rd.forward(request, response);
     }
 
     private void handleAddToCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(true);
-        Cart cart;
-
-        if (session.isNew()) {
-            cart = new Cart();
-            session.setAttribute("cart", cart);
-        } else {
-            cart = (Cart) session.getAttribute("cart");
-        }
+        Cart cart = retrieveCart(request, response);
 
         CD cd = new CD(request.getParameter("cd"));
         cart.addItem(cd, Integer.parseUnsignedInt(request.getParameter("quantity")));
 
-        RequestDispatcher rd = request.getRequestDispatcher("cart.jsp");
-        rd.forward(request, response);
+        changeView(request, response, "cart.jsp");
     }
 
     private void handleDeleteFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Eliminar el elemento del carrito seleccionado
-        HttpSession session = request.getSession(true);
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart != null) {
-            /**
-             *
-             * Código de eliminación: cart.deleteItem(new CD(request.getParameter("cd")));
-             *
-             */
+        Cart cart = retrieveCart(request, response);
+
+        String[] cds = request.getParameterValues("cd");
+        if (cds != null) {
+            for (String cd : cds) {
+                cart.deleteItem(new CD(cd));
+            }
         }
 
-        /**
-         *
-         *
-         * JSP
-         *
-         */
+        changeView(request, response, "cart.jsp");
     }
 
     private void handlePurchase(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /**
-         * Pasar a la pestaña de compra, donde está el inicio de sesión/registro
+        Cart cart = retrieveCart(request, response);
+
+        cart.clear();
+
+        /*
+         * Añadir lógica para pasar a la pestaña de inicio de sesión/registro
          */
+        changeView(request, response, "login.jsp");
     }
 
+    /**
+     * Inicio de sesión con usuario y contraseña
+     */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /**
-         * Inicio de sesión con usuario y contraseña
-         */
+        /* Guardar el correo y contraseña en la sesión para
+        * próximas compras consecutivas */
+        storeInSession(request, "email");
+        storeInSession(request, "password");
+
+       /* Aquí habría que hacer una movida con la base de datos */
+
+        changeView(request, response, "index.jsp");
     }
 
+    /**
+     * Registro con usuario, contraseña y número de tarjeta
+     */
     private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /**
-         * Registro con usuario, contraseña y nº tarjeta
-         */
+        /* Guardar el correo y contraseña en la sesión para
+         * próximas compras consecutivas */
+        storeInSession(request, "email");
+        storeInSession(request, "password");
+
+        /* Registrarlo de verdad y esas cosas */
+
+        changeView(request, response, "index.jsp");
     }
 
     private void handleSeeAllPurchases(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

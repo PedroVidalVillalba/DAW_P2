@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored="false" session="false" %>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,7 +9,8 @@
 </head>
 <body>
 
-<form action="addToCart" method="get" >
+<form action="addToCart" method="post" >
+  <input type="hidden" name="action" value="addToCart">
   <p>
     <b>CD:</b>
     <select name="cd">
@@ -24,14 +28,14 @@
   </p>
   <p>
     <b>Cantidad:</b>
-    <input type="text" value="1" name="quantity">
+    <input type="text" name="quantity" value="1">
   </p>
   <p>
     <input type="submit" value="Selecciona Producto">
   </p>
 </form>
 
-<a href="cart.jsp">Ver carrito</a>
+<a href="${pageContext.request.contextPath}/cart.jsp">Ver carrito</a>
 
 </body>
 </html>

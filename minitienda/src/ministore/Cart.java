@@ -43,7 +43,7 @@ public class Cart {
         return cart.isEmpty();
     }
 
-    public void emptyCart() {
+    public void clear() {
         cart.clear();
     }
 }

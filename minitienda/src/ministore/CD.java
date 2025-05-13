@@ -1,5 +1,6 @@
 package ministore;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class CD {
@@ -40,7 +41,7 @@ public class CD {
 
 
     public String toString() {
-        return String.format("%s | %s | %s | %.2f", name, author, country, price);
+        return String.format(Locale.US,"%s | %s | %s | %12.2f", name, author, country, price);
     }
 
     @Override

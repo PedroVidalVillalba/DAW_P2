@@ -7,5 +7,9 @@
     <servlet-mapping>
         <servlet-name>MiniStore</servlet-name>
         <url-pattern>/addToCart</url-pattern>
+        <url-pattern>/deleteFromCart</url-pattern>
+        <url-pattern>/purchase</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/signup</url-pattern>
     </servlet-mapping>
 </web-app>
