@@ -1,15 +1,12 @@
 package db;
 
 import ministore.Password;
-import org.intellij.lang.annotations.Language;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import static db.DataBase.getCurrentDB;
 
 public class UserDAO {
     private final static int MIN_USERNAME_LENGTH = 3;
@@ -19,6 +16,25 @@ public class UserDAO {
         this.connection = connection;
     }
 
+
+    /**
+     * Lectura completa de la tabla Usuarios.
+     * @return La lista de nombres de usuarios.
+     */
+    public ArrayList<String> getUsers() throws SQLException {
+        ArrayList<String> users = new ArrayList<>();
+
+        String query = "SELECT username FROM users";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(resultSet.getString("username"));
+            }
+        }
+
+        return users;
+    }
 
     // Registro de un nuevo usuario
     public void registerUser(String username, Password password) throws Exception {
@@ -30,13 +46,12 @@ public class UserDAO {
             throw new SQLException("El nombre de usuario no puede contener \",\"");
         }
 
-        ArrayList<String> users = getCurrentDB().getUsers();
+        ArrayList<String> users = getUsers();
         // Comprobación de que no existe un usuario registrado con el mismo nombre
         if (users.contains(username)) {
             throw new SQLException("El usuario " + username + " ya está registrado");
         }
 
-        @Language("SQL")
         String query = "INSERT INTO users (username, password) VALUES (?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -48,17 +63,12 @@ public class UserDAO {
 
     // Inicio de sesión de un usuario
     public void loginUser(String username, Password password) throws Exception {
-        @Language("SQL")
-        String query = "SELECT password FROM users WHERE username = ?";
+        String query = "SELECT * FROM users WHERE username = ? and password = ?";
 
-        try (PreparedStatement preparedStatement = prepareQuery(query, username);
+        try (PreparedStatement preparedStatement = prepareQuery(query, username, password.toString());
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) { /* Asegurarse de que el resultado tiene por lo menos una fila */
-                if (resultSet.getString("password").equals(password.toString())) {
-                    throw new SQLException("La contraseña del usuario " + username + " es incorrecta");
-                }
-            } else {
-                throw new SQLException("El usuario " + username + " no está registrado");
+            if (!resultSet.next()) { /* Asegurarse de que el resultado tiene por lo menos una fila */
+                throw new SQLException("Usuario o contraseña incorrectos");
             }
         }
     }

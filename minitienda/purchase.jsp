@@ -32,7 +32,7 @@
 
         <form action="purchase" method="post">
             <input type="hidden" name="action" value="purchase"/>
-            <input type="submit" value="Pagar y volver a la página principal"/>
+            <input type="submit" value="Pagar"/>
         </form>
     </c:otherwise>
 </c:choose>

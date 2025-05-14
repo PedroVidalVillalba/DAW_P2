@@ -5,6 +5,11 @@ import java.io.IOException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import static db.DataBase.getCurrentDB;
+
 public class MiniStore extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -83,13 +88,7 @@ public class MiniStore extends HttpServlet {
     }
 
     private void handlePurchase(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cart cart = retrieveCart(request, response);
-
-        cart.clear();
-
-        /*
-         * Añadir lógica para pasar a la pestaña de inicio de sesión/registro
-         */
+        /* Al añadir la pestaña de inicio de sesión, solo cambia de pestaña */
         changeView(request, response, "login.jsp");
     }
 
@@ -97,33 +96,71 @@ public class MiniStore extends HttpServlet {
      * Inicio de sesión con usuario y contraseña
      */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /* Guardar el correo y contraseña en la sesión para
-        * próximas compras consecutivas */
-        storeInSession(request, "email");
-        storeInSession(request, "password");
+        try {
+            getCurrentDB().loginUser(request.getParameter("email"), new Password(request.getParameter("email"), request.getParameter("password")));
 
-       /* Aquí habría que hacer una movida con la base de datos */
+            doPurchase(request, response);
+            changeView(request, response, "index.jsp");
 
-        changeView(request, response, "index.jsp");
+        } catch (Exception e) {
+            showError(request, response, e.getMessage());
+        }
     }
 
     /**
      * Registro con usuario, contraseña y número de tarjeta
      */
     private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /* Guardar el correo y contraseña en la sesión para
-         * próximas compras consecutivas */
-        storeInSession(request, "email");
-        storeInSession(request, "password");
+        try {
+            getCurrentDB().registerUser(request.getParameter("email"), new Password(request.getParameter("email"), request.getParameter("password")));
 
-        /* Registrarlo de verdad y esas cosas */
+            doPurchase(request, response);
+            changeView(request, response, "index.jsp");
 
-        changeView(request, response, "index.jsp");
+        } catch (Exception e) {
+            showError(request, response, e.getMessage());
+        }
     }
 
     private void handleSeeAllPurchases(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /**
-         * Después de la compra, mostrar todas las compras realizadas por el usuario
+        /*
+         * Por si se añade una pestaña de ver todas las compras realizadas
+         * Esta función está sin probar
          */
+        try {
+            List<Purchase> purchases = getCurrentDB().getPurchases(request.getParameter("email"));
+            request.getSession().setAttribute("purchases", purchases);
+        } catch (Exception e) {
+            showError(request, response, e.getMessage());
+        }
+
+
+    }
+
+    private void showError(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+        /**
+         * Función que muestra errores producidos, principalmente
+         * errores de inicio de sesión/registro
+         *
+         *
+         *
+         * Se podría mejorar con un popup de error, en vez de una pestaña aparte
+         *
+         */
+        request.getSession().setAttribute("error", message);
+        changeView(request, response, "error.jsp");
+
+    }
+
+    private void doPurchase(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        /* Guardar el correo y contraseña en la sesión para próximas compras consecutivas */
+        storeInSession(request, "email");
+        storeInSession(request, "password");
+
+        /* Guardar la información de la compra en la base de datos y vaciar el carrito */
+        Cart cart = retrieveCart(request, response);
+        Purchase purchase = new Purchase(request.getParameter("email"), new Timestamp(System.currentTimeMillis()), (float) cart.getTotal());
+        getCurrentDB().addPurchase(request.getParameter("email"), purchase);
+        cart.clear();
     }
 }

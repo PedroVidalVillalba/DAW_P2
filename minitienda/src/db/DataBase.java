@@ -2,7 +2,6 @@ package db;
 
 import ministore.Password;
 import ministore.Purchase;
-import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,13 +17,13 @@ public class DataBase {
     private final UserDAO userDAO;
     private final PurchaseDAO purchaseDAO;
 
-    public static final String CONFIGURATION_FILE = "/database.properties";
+    public static final String CONFIGURATION_FILE = "database.properties";
 
     public DataBase() throws Exception {
         Properties configuration = new Properties();
 
         /* Cargar el archivo de configuración */
-        try (InputStream configurationFile = DataBase.class.getResourceAsStream(CONFIGURATION_FILE)) {
+        try (InputStream configurationFile = getClass().getClassLoader().getResourceAsStream(CONFIGURATION_FILE)) {
             if (configurationFile == null) {
                 throw new IOException("Fichero de configuración de la base de datos no encontrado: " + CONFIGURATION_FILE);
             }
@@ -35,6 +34,7 @@ public class DataBase {
         user.setProperty("user", configuration.getProperty("user"));
         user.setProperty("password", configuration.getProperty("password"));
 
+        Class.forName("org.postgresql.Driver");
         String manager = configuration.getProperty("manager");
         connection = DriverManager.getConnection("jdbc:" + manager + "://" +
                         configuration.getProperty("server") + ":" +
@@ -64,25 +64,7 @@ public class DataBase {
         }
     }
 
-    /**
-     * Lectura completa de la tabla Usuarios.
-     * @return La lista de nombres de usuarios.
-     */
-    public ArrayList<String> getUsers() throws SQLException {
-        ArrayList<String> users = new ArrayList<>();
 
-        @Language("SQL")
-        String query = "SELECT username FROM users";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                users.add(resultSet.getString("username"));
-            }
-        }
-
-        return users;
-    }
 
     public void registerUser(String username, Password password) throws Exception {
         userDAO.registerUser(username, password);
