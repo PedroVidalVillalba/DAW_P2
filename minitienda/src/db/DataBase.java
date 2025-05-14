@@ -66,8 +66,8 @@ public class DataBase {
 
 
 
-    public void registerUser(String username, Password password) throws Exception {
-        userDAO.registerUser(username, password);
+    public void registerUser(String username, Password password, String cardType, String cardNumber) throws Exception {
+        userDAO.registerUser(username, password, cardType, cardNumber);
     }
 
     public void loginUser(String username, Password password) throws Exception {

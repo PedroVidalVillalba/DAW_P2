@@ -37,7 +37,7 @@ public class UserDAO {
     }
 
     // Registro de un nuevo usuario
-    public void registerUser(String username, Password password) throws Exception {
+    public void registerUser(String username, Password password, String cardType, String cardNumber) throws Exception {
         // Comprobación de que la longitud del nombre es correcta
         if(username.length() < MIN_USERNAME_LENGTH) {
             throw new SQLException("El nombre de usuario " + username + " es demasiado corto. La longitud mínima es " + MIN_USERNAME_LENGTH + " caracteres");
@@ -52,11 +52,13 @@ public class UserDAO {
             throw new SQLException("El usuario " + username + " ya está registrado");
         }
 
-        String query = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String query = "INSERT INTO users (username, password, type, card) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password.toString());
+            preparedStatement.setString(3, cardType);
+            preparedStatement.setString(4, cardNumber);
             preparedStatement.executeUpdate();
         }
     }

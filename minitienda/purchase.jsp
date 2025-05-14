@@ -34,6 +34,8 @@
             <input type="hidden" name="action" value="purchase"/>
             <input type="submit" value="Pagar"/>
         </form>
+
+        <a href="${pageContext.request.contextPath}/cart.jsp">Volver al carrito</a>
     </c:otherwise>
 </c:choose>
 

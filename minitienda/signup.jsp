@@ -9,15 +9,15 @@
 
 <html lang="es">
 <head>
-    <title>Inicio de sesión</title>
+    <title>Registro</title>
     <meta charset="utf-8">
 </head>
 <body>
 
-<form action="login" method="post">
-    <input type="hidden" name="action" value="login">
+<form action="signup" method="post">
+    <input type="hidden" name="action" value="signup">
 
-    <h1>Inicia sesión</h1>
+    <h1>Registráte</h1>
     <label>
         Correo electrónico:
         <input type="email" name="email" value="${sessionScope.email}" required>
@@ -26,13 +26,19 @@
         Contraseña:
         <input type="password" name="password" value="${sessionScope.password}" required>
     </label>
-    <input type="submit" value="Login">
+    <label>
+        Tipo de tarjeta:
+        <select name="cardType" required>
+            <option value="VISA">VISA</option>
+            <option value="MASTERCARD">MASTERCARD</option>
+        </select>
+    </label>
+    <label>
+        Número de tarjeta:
+        <input type="text" name="cardNumber" required>
+    </label>
+    <input type="submit" value="Registrarse">
 </form>
-
-<p>
-    ¿No tienes una cuenta?
-    <a href="${pageContext.request.contextPath}/signup.jsp">Regístrate</a>
-</p>
 
 </body>
 </html>

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PurchaseDAO {
     // Método para obtener todas las fechas de compra de un usuario
     public List<Purchase> getPurchases(String buyer) throws SQLException {
         List<Purchase> purchases = new ArrayList<>();
-        String sql = "SELECT (date, cost) FROM Purchases WHERE buyer = ?";
+        String sql = "SELECT date, cost FROM Purchases WHERE buyer = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, buyer);

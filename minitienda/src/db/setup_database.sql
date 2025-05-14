@@ -30,6 +30,7 @@ BEGIN
         CREATE TABLE Users (
             username VARCHAR(30) PRIMARY KEY,
             password CHAR(64),
+            type VARCHAR(20),
             card VARCHAR(20)
         );
     END IF;

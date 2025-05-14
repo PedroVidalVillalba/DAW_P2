@@ -17,7 +17,7 @@
 <p>Error</p>
 <p> <c:out value="${sessionScope.error}"/>  </p>
 <p>
-    <a href="${pageContext.request.contextPath}/purchase.jsp">Volver atrás</a>
+    <a href="${pageContext.request.contextPath}/index.jsp">Volver al inicio</a>
 </p>
 
 </body>

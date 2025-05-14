@@ -38,7 +38,7 @@ public class MiniStore extends HttpServlet {
         }
     }
 
-    private Cart retrieveCart(HttpServletRequest request, HttpServletResponse response) {
+    private Cart retrieveCart(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         Cart cart = (Cart) session.getAttribute("cart");
 
@@ -51,8 +51,8 @@ public class MiniStore extends HttpServlet {
     }
 
     private void storeInSession(HttpServletRequest request, String key) {
-        HttpSession session = request.getSession();
-        Object value = session.getAttribute(key);
+        HttpSession session = request.getSession(true);
+        Object value = request.getParameter(key);
 
         if (value != null) {
             session.setAttribute(key, value);
@@ -65,7 +65,7 @@ public class MiniStore extends HttpServlet {
     }
 
     private void handleAddToCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cart cart = retrieveCart(request, response);
+        Cart cart = retrieveCart(request);
 
         CD cd = new CD(request.getParameter("cd"));
         cart.addItem(cd, Integer.parseUnsignedInt(request.getParameter("quantity")));
@@ -75,7 +75,7 @@ public class MiniStore extends HttpServlet {
 
     private void handleDeleteFromCart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Eliminar el elemento del carrito seleccionado
-        Cart cart = retrieveCart(request, response);
+        Cart cart = retrieveCart(request);
 
         String[] cds = request.getParameterValues("cd");
         if (cds != null) {
@@ -97,11 +97,17 @@ public class MiniStore extends HttpServlet {
      */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            getCurrentDB().loginUser(request.getParameter("email"), new Password(request.getParameter("email"), request.getParameter("password")));
-
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            getCurrentDB().loginUser(email, new Password(email, password));
+        } catch (Exception e) {
+            storeInSession(request, "email");
+            storeInSession(request, "password");
+            changeView(request, response, "signup.jsp");
+        }
+        try {
             doPurchase(request, response);
-            changeView(request, response, "index.jsp");
-
+            changeView(request, response, "confirmation.jsp");
         } catch (Exception e) {
             showError(request, response, e.getMessage());
         }
@@ -112,11 +118,14 @@ public class MiniStore extends HttpServlet {
      */
     private void handleSignup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            getCurrentDB().registerUser(request.getParameter("email"), new Password(request.getParameter("email"), request.getParameter("password")));
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String cardType = request.getParameter("cardType");
+            String cardNumber = request.getParameter("cardNumber");
+            getCurrentDB().registerUser(email, new Password(email, password), cardType, cardNumber);
 
             doPurchase(request, response);
-            changeView(request, response, "index.jsp");
-
+            changeView(request, response, "confirmation.jsp");
         } catch (Exception e) {
             showError(request, response, e.getMessage());
         }
@@ -158,9 +167,12 @@ public class MiniStore extends HttpServlet {
         storeInSession(request, "password");
 
         /* Guardar la información de la compra en la base de datos y vaciar el carrito */
-        Cart cart = retrieveCart(request, response);
-        Purchase purchase = new Purchase(request.getParameter("email"), new Timestamp(System.currentTimeMillis()), (float) cart.getTotal());
-        getCurrentDB().addPurchase(request.getParameter("email"), purchase);
+        Cart cart = retrieveCart(request);
+        String email = request.getParameter("email");
+        Purchase purchase = new Purchase(email, new Timestamp(System.currentTimeMillis()), (float) cart.getTotal());
+        getCurrentDB().addPurchase(email, purchase);
+        request.setAttribute("total", cart.getTotal());
+        request.setAttribute("history", getCurrentDB().getPurchases(email));
         cart.clear();
     }
 }
