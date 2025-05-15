@@ -27,7 +27,7 @@
         Contraseña:
         <input type="password" name="password" value="${sessionScope.password}" required>
     </label>
-    <input type="submit" value="Login">
+    <input type="submit" value="Confirmar">
 </form>
 
 <p>
