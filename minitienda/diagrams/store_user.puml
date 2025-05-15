@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+
+title Registrar usuario y guardar pedido
+
+actor Usuario
+participant Registro as Signup                  #ffff99
+participant "Confirmación" as Confirmation      #ffff99
+participant "MiniStore\n(servlet)" as Servlet   #ff9999
+participant Cart                                #99ff99
+participant User                                #99ff99
+participant Purchase                            #99ff99
+participant DataBase                            #orange
+participant UserDAO                             #orange
+participant PurchaseDAO                         #orange
+database "Base de datos" as Database            #orange
+
+Usuario --> Signup: Introduce correo, contraseña,\ntipo y número de tarjeta\ndespués de rellenar el carrito
+Signup -> Servlet: registerUser()
+create User
+Servlet -->> User: <<create>>
+return user
+Servlet -> DataBase: registerUser(user)
+DataBase -> UserDAO: registerUser(user)
+UserDAO -> Database: inserta en la base de datos
+Servlet <<-- DataBase: ok
+Servlet -> Servlet: retrieveCart()
+Servlet <-- Cart
+create Purchase
+Servlet -->> Purchase: <<create>>
+Servlet <<-- Purchase: purchase
+Servlet -> DataBase: addPurchase(purchase)
+DataBase -> PurchaseDAO: addPurchase(purchase)
+PurchaseDAO -> Database: inserta la compra en la base de datos
+Servlet <<-- DataBase: ok
+Servlet -> Cart: clear()
+Servlet -> Servlet: changeView()
+Servlet --> Confirmation: Cambiar la vista
+Confirmation --> Usuario: Muestra el importe de la compra
+
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+
+title Diagrama de clases del modelo
+
+class CD {
+- String name
+- String author
+- String country
+- double price
++ String getName()
++ String getAuthor()
++ String getCountry()
++ double getPrice()
++ String toString()
++ boolean equals(Object)
++ int hashCode()
+}
+
+
+class DataBase <<singleton>> {
+- {static} DataBase currentDB
+- {static} Connection connection
+- UserDAO userDAO
+- PurchaseDAO purchaseDAO
++ {static} String CONFIGURATION_FILE
++ {static} DataBase getCurrentDB()
++ {static} Connection getConnection()
++ {static} void closeCurrentDB()
++ void registerUser(User)
++ void loginUser(String,Password)
++ void addPurchase(String,Purchase)
++ List<Purchase> getPurchases(String)
+}
+
+
+class PurchaseDAO {
+~ Connection connection
++ void addPurchase(Purchase)
++ List<Purchase> getPurchases(String)
+}
+
+
+class Password {
+- Integer256 value
++ boolean compareToSaved(String)
++ boolean equals(Object)
++ String toString()
+}
+
+
+class Password$Integer256 {
+- long[] number
++ void cipher(String)
++ boolean equals(Object)
++ String toString()
+}
+
+class Cart {
+- HashMap<CD,Integer> cart
++ Set<CD> getItems()
++ double getTotal()
++ int getQuantity(CD)
++ void addItem(CD,int)
++ void deleteItem(CD)
++ double getCost(CD)
++ boolean isEmpty()
++ void clear()
+}
+
+
+class UserDAO {
+- {static} int MIN_USERNAME_LENGTH
+~ Connection connection
++ ArrayList<String> getUsers()
++ void registerUser(User)
++ void loginUser(String,Password)
+- PreparedStatement prepareQuery(String,String)
+}
+
+
+class Purchase {
+- String buyer
+- Timestamp date
+- float cost
++ Timestamp getDate()
++ float getCost()
++ String buyer()
++ Timestamp date()
++ float cost()
+}
+
+
+class User {
+- String username
+- Password password
+- String cardType
+- String cardNumber
++ String cardNumber()
++ String username()
++ Password password()
++ String cardType()
+}
+
+
+
+() Servlet
+
+Cart "1" *-- "0..*" CD: Contiene >
+
+Purchase "0..*" -- "1" PurchaseDAO: Registra <
+User "0..*" -- "1" UserDAO: Registra y verifica <
+User "1" *-- "1" Password: Tiene >
+
+DataBase "1" *-- "1" UserDAO: Proporciona interfaz >
+DataBase "1" *-- "1" PurchaseDAO: Proporciona interfaz >
+
+Servlet "1" *-- "1" Cart: Tiene >
+Servlet "1" *-- "1" DataBase: Accede >
+
+Password +.. Password$Integer256
+@enduml

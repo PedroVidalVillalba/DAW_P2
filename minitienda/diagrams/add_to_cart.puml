@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autonumber
+
+title Seleccionar producto del catálogo
+
+actor Usuario
+participant "Minitienda" as Index               #ffff99
+participant "Carrito de la compra" as CartPage  #ffff99
+participant "MiniStore\n(servlet)" as Servlet   #ff9999
+participant CD                                  #99ff99
+participant Cart                                #99ff99
+
+Usuario --> Index: Selecciona CD y cantidad
+Index -> Servlet: addToCart()
+Servlet -> Servlet: retrieveCart()
+create Cart
+Servlet -->> Cart: <<create>>
+note left: Caso de uso de la primera selección de CD
+return cart
+create CD
+Servlet -->> CD: <<create>>
+return cd
+Servlet -> Cart: addItem(cd, cantidad)
+Servlet -> Servlet: changeView()
+Servlet --> CartPage: Cambiar la vista
+CartPage --> Usuario: Muestra el carrito de la compra
+
+@enduml
