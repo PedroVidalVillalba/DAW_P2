@@ -122,7 +122,9 @@ public class MiniStore extends HttpServlet {
             String password = request.getParameter("password");
             String cardType = request.getParameter("cardType");
             String cardNumber = request.getParameter("cardNumber");
-            getCurrentDB().registerUser(email, new Password(email, password), cardType, cardNumber);
+
+            User user = new User(email, new Password(email, password), cardType, cardNumber);
+            getCurrentDB().registerUser(user);
 
             doPurchase(request, response);
             changeView(request, response, "confirmation.jsp");

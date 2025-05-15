@@ -2,6 +2,7 @@ package db;
 
 import ministore.Password;
 import ministore.Purchase;
+import ministore.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,8 +67,8 @@ public class DataBase {
 
 
 
-    public void registerUser(String username, Password password, String cardType, String cardNumber) throws Exception {
-        userDAO.registerUser(username, password, cardType, cardNumber);
+    public void registerUser(User user) throws Exception {
+        userDAO.registerUser(user);
     }
 
     public void loginUser(String username, Password password) throws Exception {
