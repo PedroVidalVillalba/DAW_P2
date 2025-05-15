@@ -11,12 +11,12 @@
 <head>
     <title>Registro</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 
 <form action="signup" method="post">
     <input type="hidden" name="action" value="signup">
-
     <h1>Registráte</h1>
     <label>
         Correo electrónico:

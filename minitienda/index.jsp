@@ -6,9 +6,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Minitienda</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
-
 <form action="addToCart" method="post" >
   <input type="hidden" name="action" value="addToCart">
   <p>
@@ -32,10 +32,9 @@
   </p>
   <p>
     <input type="submit" value="Selecciona Producto">
+    <a href="${pageContext.request.contextPath}/cart.jsp">Ver carrito</a>
   </p>
 </form>
-
-<a href="${pageContext.request.contextPath}/cart.jsp">Ver carrito</a>
 
 </body>
 </html>

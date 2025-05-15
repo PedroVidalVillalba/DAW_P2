@@ -10,6 +10,8 @@
 <html>
 <head>
     <title>Carrito de la compra</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 
@@ -29,6 +31,7 @@
                     <th>Título del CD</th>
                     <th>Cantidad</th>
                     <th>Importe</th>
+                    <th>Eliminar</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -73,6 +76,5 @@
     <a href="${pageContext.request.contextPath}/index.jsp">Seguir comprando</a>
     <a href="${pageContext.request.contextPath}/purchase.jsp">Ir a pagar</a>
 </p>
-
 </body>
 </html>

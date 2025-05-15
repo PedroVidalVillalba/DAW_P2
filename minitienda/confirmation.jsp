@@ -11,6 +11,7 @@
 <head>
   <title>Confirmación de compra</title>
   <meta charset="utf-8">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 
@@ -22,6 +23,8 @@
           pattern="$#0.00"/>
   fue realizada con éxito.
 </p>
+
+<a href="${pageContext.request.contextPath}/index.jsp">Volver al inicio</a>
 
 <h2>Histórico de compras</h2>
 <table>
@@ -44,8 +47,6 @@
   </c:forEach>
   </tbody>
 </table>
-
-<a href="${pageContext.request.contextPath}/index.jsp">Volver al inicio</a>
 
 </body>
 </html>

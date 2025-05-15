@@ -1,0 +1,105 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo y tipografía general */
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Encabezados centrados */
+h1, h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 1rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button,
+input[type="submit"],
+a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+button,
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+a {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+a:hover {
+    background-color: #5a6268;
+}
+
+/* Tablas" (carrito) */
+table {
+    width: auto;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+/* Mensajes de error */
+.error {
+    color: #d83838;
+    margin-bottom: 1rem;
+    text-align: center;
+}

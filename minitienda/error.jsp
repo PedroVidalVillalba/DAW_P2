@@ -9,8 +9,9 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Minitienda</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 

@@ -11,6 +11,7 @@
 <head>
     <title>Caja</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 
@@ -33,9 +34,8 @@
         <form action="purchase" method="post">
             <input type="hidden" name="action" value="purchase"/>
             <input type="submit" value="Pagar"/>
+            <a href="${pageContext.request.contextPath}/cart.jsp">Volver al carrito</a>
         </form>
-
-        <a href="${pageContext.request.contextPath}/cart.jsp">Volver al carrito</a>
     </c:otherwise>
 </c:choose>
 

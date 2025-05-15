@@ -11,6 +11,7 @@
 <head>
     <title>Inicio de sesión</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css" />
 </head>
 <body>
 
